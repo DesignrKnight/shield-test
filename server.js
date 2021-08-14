@@ -2,6 +2,7 @@ const express = require('express');
 const requestIP = require('request-ip');
 const nodeCache = require('node-cache');
 const axios = require('axios');
+const isIp = require('is-ip');
 require('dotenv').config();
 
 const app = express();
@@ -30,7 +31,10 @@ const updateCache = (ip) => {
 	IPCache.set(ip, IPArray, (IPCache.getTtl(ip) - Date.now()) * MS_TO_S || TIME_FRAME_IN_S);
 };
 const ipMiddleware = async function (req, res, next) {
-	const clientIP = requestIP.getClientIp(req);
+	let clientIP = requestIP.getClientIp(req);
+	if (isIp.v6(clientIP)) {
+		clientIP = clientIP.split(':').splice(0, 4).join('.') + '::/64';
+	}
 	console.log(clientIP);
 	updateCache(clientIP);
 	const IPArray = IPCache.get(clientIP);
