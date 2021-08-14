@@ -33,7 +33,7 @@ const updateCache = (ip) => {
 const ipMiddleware = async function (req, res, next) {
 	let clientIP = requestIP.getClientIp(req);
 	if (isIp.v6(clientIP)) {
-		clientIP = clientIP.split(':').splice(0, 4).join('.') + '::/64';
+		clientIP = clientIP.split(':').splice(0, 4).join(':') + '::/64';
 	}
 	console.log(clientIP);
 	updateCache(clientIP);
