@@ -31,6 +31,7 @@ const updateCache = (ip) => {
 };
 const ipMiddleware = async function (req, res, next) {
 	const clientIP = requestIP.getClientIp(req);
+	console.log(clientIP);
 	updateCache(clientIP);
 	const IPArray = IPCache.get(clientIP);
 	if (IPArray.length > 1) {
